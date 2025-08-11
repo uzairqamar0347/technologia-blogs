@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} Articles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+   <style>
+    body {
+        font-family: 'Merriweather', serif;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
+    }
+    .prose h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .prose h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    .prose p {
+        line-height: 1.75;
+        margin-bottom: 1rem;
+    }
+    .prose blockquote {
+        border-left: 4px solid #3b82f6;
+        padding-left: 1rem;
+        font-style: italic;
+        color: #4b5563;
+    }
+    .prose img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <a href="{% url 'article_list' %}" class="text-3xl font-bold text-blue-600">Insight</a>
+                <span class="ml-2 text-sm text-gray-500">Modern Digital Publication</span>
+            </div>
+            
+            <div class="flex items-center space-x-4 w-full md:w-auto">
+                <div class="relative search-bar w-full md:w-40">
+                    <input type="text" placeholder="Search articles..." class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <button class="md:hidden text-gray-600 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <nav class="mt-4 hidden md:block">
+            <ul class="flex space-x-8 category-nav">
+                <li><a href="{% url 'article_list' %}" class="text-gray-800 hover:text-blue-600 font-medium">Home</a></li>
+                {% for category in categories %}
+                <li>
+                    <a href="{% url 'category_list' category_name=category.name %}" class="text-gray-800 hover:text-blue-600 font-medium">{{ category.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</header>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div class="md:hidden bg-white shadow-lg hidden" id="mobileMenu">
+        <div class="container mx-auto px-4 py-2">
+            <ul class="space-y-2">
+                <li><a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Home</a></li>
+                <li><a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Technology</a></li>
+                <li><a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Science</a></li>
+                <li><a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Lifestyle</a></li>
+                <li><a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Culture</a></li>
+                <li><a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Travel</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 fade-in">
+        
+        </section>
+
+        <!-- Latest Articles -->
+        <section>
+            <h2 class="text-2xl font-bold mb-6 border-b pb-2">Latest Articles</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for article in articles %}
+        <article class="bg-white rounded-lg overflow-hidden article-card">
+            {% if article.thumbnail %}
+                <img src="{{ article.thumbnail.url }}" alt="{{ article.title }} thumbnail" class="w-full h-48 object-cover">
+            {% else %}
+                <img src="https://via.placeholder.com/600x400.png?text=No+Image" alt="Placeholder image" class="w-full h-48 object-cover">
+            {% endif %}
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-semibold text-blue-600">Science</span>
+                    <span class="text-xs text-gray-500">{{ article.pub_date|date:"M d, Y" }}</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3">
+                    <a href="{% url 'article_detail' pk=article.id %}">{{ article.title }}</a>
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                    {{ article.content|truncatewords:20|safe }}
+                </p>
+                <a href="{% url 'article_detail' pk=article.id %}" class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
+                    Read more <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                </a>
+            </div>
+        </article>
+    {% endfor %}
+</div>
+        </section>
+        
+        <!-- Newsletter -->
+        <section class="mt-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl p-8 text-white">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-2xl font-bold mb-2">Stay Updated with Our Latest Articles</h2>
+                <p class="mb-6">Subscribe to our newsletter and get the best content delivered straight to your inbox.</p>
+                <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-full text-gray-800 focus:outline-none">
+                    <button type="submit" class="bg-white hover:bg-gray-100 text-blue-600 font-medium py-3 px-6 rounded-full transition duration-300">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-sm mt-3 text-blue-100">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Insight</h3>
+                    <p class="text-gray-400">Modern digital publication delivering thought-provoking content across various topics.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Technology</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Science</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Lifestyle</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Culture</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Travel</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Our Team</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Advertise</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
+                <p>© 2023 Insight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    </body>
+</html>

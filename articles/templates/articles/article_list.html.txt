@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Article Site</title>
+</head>
+<body>
+    <h1>Latest Articles</h1>
+    {% for article in articles %}
+        <div>
+            <h2><a href="{% url 'article_detail' pk=article.id %}">{{ article.title }}</a></h2>
+            <p>Published on: {{ article.pub_date }}</p>
+            <hr>
+        </div>
+    {% endfor %}
+</body>
+</html>
